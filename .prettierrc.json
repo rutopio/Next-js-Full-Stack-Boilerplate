@@ -1,0 +1,38 @@
+{
+  "printWidth": 80,
+  "tabWidth": 2,
+  "semi": true,
+  "singleQuote": false,
+  "trailingComma": "es5",
+  "bracketSpacing": true,
+  "arrowParens": "always",
+  "bracketSameLine": false,
+  "plugins": [
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
+  ],
+  "tailwindConfig": "./tailwind.config.ts",
+  "tailwindFunctions": ["cn", "clsx"],
+  "importOrder": [
+    "^react",
+    "^next",
+    "^@hookform/(.*)",
+    "zod",
+    "lucide-react",
+    "sonner",
+    "<THIRD_PARTY_MODULES>",
+    "",
+    "<TYPES>",
+    "",
+    "^@/components/(.*)",
+    "^@/schemas/(.*)",
+    "^@/(.*)",
+    "^@(.*)",
+    "",
+    "^[.]((?!.s?css$|.less$).)*$",
+    "",
+    "(.s?css|.less)$"
+  ],
+  "importOrderParserPlugins": ["typescript", "jsx", "decorators-legacy"],
+  "importOrderTypeScriptVersion": "5.0.0"
+}
