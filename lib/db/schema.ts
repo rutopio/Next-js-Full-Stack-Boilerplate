@@ -10,10 +10,11 @@ import {
 export const usersTable = pgTable("users_table", {
   id: serial("id").primaryKey(),
   userId: bigint("user_id", { mode: "bigint" }).notNull().unique(),
-  username: text("username").notNull(),
-  email: text("email").notNull().unique(),
-  active: boolean("active").notNull().default(true),
-  updatedAt: timestamp("updated_at")
+  email: text("email").notNull().default(""),
+  password: text("password").notNull().default(""),
+  isDeleted: boolean("is_deleted").notNull().default(false),
+  isAdmin: boolean("is_admin").notNull().default(false),
+  createdAt: timestamp("created_at")
     .notNull()
     .$onUpdate(() => new Date()),
 });
