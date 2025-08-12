@@ -22,13 +22,15 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
 
-      async authorize({
-        email,
-        password,
-      }: {
-        email: string;
-        password: string;
-      }) {
+      async authorize(credentials) {
+        if (!credentials?.email || !credentials?.password) {
+          throw new Error("invalid_credentials");
+        }
+
+        const { email, password } = credentials as {
+          email: string;
+          password: string;
+        };
         const user = await getUserByEmail(email as string);
         if (!user) {
           throw new Error("email_not_found.");
@@ -40,7 +42,11 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           throw new Error("incorrect_password.");
         }
 
-        return { ...user, maxAge: 30 * 24 * 60 * 60 };
+        return {
+          id: user.userId,
+          email: user.email,
+          maxAge: 30 * 24 * 60 * 60,
+        };
       },
     }),
   ],

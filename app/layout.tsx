@@ -5,10 +5,13 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { SessionProvider } from "next-auth/react";
+import { ChevronLeftIcon } from "lucide-react";
 import { Toaster } from "sonner";
 
 import { QueryProvider } from "@/components/query-provider";
 import { NextThemeProvider } from "@/components/theme-provider";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const geistSans = Geist({

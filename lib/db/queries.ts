@@ -21,6 +21,8 @@ export async function createUser(user: { email: string; password: string }) {
       createdAt: new Date(),
       updatedAt: new Date(),
     });
+
+    return serializeId(userId);
   } catch (error) {
     console.error(error);
     throw error;

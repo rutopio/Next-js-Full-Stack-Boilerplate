@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 
-export const loginFormSchema = z.object({
+const loginFormSchema = z.object({
   email: z
     .email({
       message: "Invalid email",

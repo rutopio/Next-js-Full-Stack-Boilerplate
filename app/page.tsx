@@ -2,9 +2,15 @@
 
 import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
-import { ArrowRightIcon, LogOutIcon, UserIcon } from "lucide-react";
+import {
+  ArrowRightIcon,
+  ChevronLeftIcon,
+  LogOutIcon,
+  UserIcon,
+} from "lucide-react";
 
 import CurrentSession from "@/components/current-session";
+import { ThemeToggle } from "@/components/theme-toggle";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
