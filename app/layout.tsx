@@ -5,10 +5,10 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { SessionProvider } from "next-auth/react";
-import { ThemeProvider } from "next-themes";
 import { Toaster } from "sonner";
 
 import { QueryProvider } from "@/components/query-provider";
+import { NextThemeProvider } from "@/components/theme-provider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const geistSans = Geist({
@@ -33,15 +33,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head />
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <SessionProvider>
           <QueryProvider>
             <ReactQueryDevtools initialIsOpen={true} />
-            <ThemeProvider
+            <NextThemeProvider
               attribute="class"
-              defaultTheme="light"
+              defaultTheme="system"
               enableSystem
               disableTransitionOnChange
             >
@@ -52,7 +53,7 @@ export default function RootLayout({
                 closeButton
                 position="top-center"
               />
-            </ThemeProvider>
+            </NextThemeProvider>
           </QueryProvider>
         </SessionProvider>
       </body>
