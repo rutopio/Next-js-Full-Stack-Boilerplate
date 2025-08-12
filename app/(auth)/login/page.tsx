@@ -19,7 +19,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { useMutation } from "@tanstack/react-query";
 
-const loginFormSchema = z.object({
+export const loginFormSchema = z.object({
   email: z
     .email({
       message: "Invalid email",
@@ -43,16 +43,19 @@ export default function LoginPage() {
         },
       });
 
-      if (!response.ok) {
+      const result = await response.json();
+      console.log("result", result);
+
+      if (!response.ok || result.success === false) {
         throw new Error(`Invalid email or password (${response.status})`);
       }
 
-      return response.json();
+      return result;
     },
     onSuccess: () => {
-      toast.success("Login successful, redirecting to home page...");
+      toast.success("Login successful, redirecting to dashboard...");
       setTimeout(() => {
-        window.location.replace("/");
+        window.location.replace("/dashboard");
       }, 1000);
     },
     onError: (error) => {
@@ -94,7 +97,7 @@ export default function LoginPage() {
                       <Input
                         className="peer ps-9"
                         type="text"
-                        placeholder="Please enter your email"
+                        placeholder="user@example.com"
                         maxLength={100}
                         autoFocus
                         {...field}
@@ -137,7 +140,11 @@ export default function LoginPage() {
             />
           </div>
 
-          <Button type="submit" className="mt-4 w-full" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            className="mt-4 w-full cursor-pointer"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <span className="flex items-center">
                 <Loader2Icon className="mr-2 size-4 animate-spin" />
@@ -152,7 +159,7 @@ export default function LoginPage() {
             <div>Don&apos;t have an account?</div>
             <Link href="/signup">
               <span className="text-primary font-semibold hover:underline">
-                Sign up
+                Click to Sign up
               </span>
             </Link>
           </div>

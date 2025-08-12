@@ -108,7 +108,7 @@ export default function SignUpPage() {
                       <Input
                         className="peer ps-9"
                         type="text"
-                        placeholder="Please enter your email"
+                        placeholder="user@example.com"
                         maxLength={100}
                         autoFocus
                         {...field}
@@ -149,7 +149,7 @@ export default function SignUpPage() {
                   <FormMessage />
                   <FormDescription className="text-muted-foreground text-xs">
                     Password must be at least 8 characters, and contain numbers
-                    and English letters.
+                    and letters.
                   </FormDescription>
                 </FormItem>
               )}
@@ -185,7 +185,11 @@ export default function SignUpPage() {
               )}
             />
           </div>
-          <Button type="submit" className="mt-4 w-full" disabled={isSubmitting}>
+          <Button
+            type="submit"
+            className="mt-4 w-full cursor-pointer"
+            disabled={isSubmitting}
+          >
             {isSubmitting ? (
               <>
                 <Loader2Icon className="mr-2 size-4 animate-spin" />

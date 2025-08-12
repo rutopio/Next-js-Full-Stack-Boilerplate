@@ -1,3 +1,5 @@
+import "server-only";
+
 import { genSaltSync, hashSync } from "bcrypt-ts";
 import { and, eq } from "drizzle-orm";
 
@@ -13,14 +15,12 @@ export async function createUser(user: { email: string; password: string }) {
 
   try {
     await db.insert(usersTable).values({
-      ...user,
       userId,
-      password: hash,
-    });
-    return {
       email: user.email,
-      userId: serializeId(userId),
-    };
+      password: hash,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    });
   } catch (error) {
     console.error(error);
     throw error;
@@ -38,7 +38,15 @@ export async function getUserByUserId(userId: string) {
           eq(usersTable.isDeleted, false)
         )
       );
-    return user;
+
+    if (!user) {
+      return null;
+    }
+
+    return {
+      ...user,
+      userId: serializeId(user.userId),
+    };
   } catch (error) {
     console.error(error);
     throw error;
@@ -51,14 +59,29 @@ export async function getUserByEmail(email: string) {
       .select()
       .from(usersTable)
       .where(eq(usersTable.email, email));
-    return user;
+
+    if (!user) {
+      return null;
+    }
+
+    console.log("user", user);
+
+    return {
+      ...user,
+      userId: serializeId(user.userId),
+    };
   } catch (error) {
     console.error(error);
     throw error;
   }
 }
 
-export async function updateUserByUserId(userId: string, data: any) {
+export async function updateUserByUserId(
+  userId: string,
+  data: {
+    password?: string;
+  }
+) {
   try {
     await db
       .update(usersTable)

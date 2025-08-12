@@ -1,13 +1,16 @@
 // AWS Amplify or Netlify might not work with middleware demo of auth.js due to multiple set-cookie headers
 // Reference: https://github.com/nextauthjs/next-auth/issues/12909#issuecomment-2831679350
 
+import NextAuth from "next-auth";
 import { NextRequest } from "next/server";
 
-import { auth } from "@/auth";
+import { authConfig } from "@/app/auth.config";
+
+export default NextAuth(authConfig).auth;
 
 export async function middleware(req: NextRequest) {
-  // @ts-expect-error the type that auth returns is NOT a NextResponse but a plain Response
-  const resp: Response = await auth(req);
+  //   @ts-expect-error the type that auth returns is NOT a NextResponse but a plain Response
+  const resp: Response = await NextAuth(authConfig).auth(req);
 
   if (req.nextUrl.pathname.startsWith("/api/auth/signout")) {
     // remove all session cookies, then re-add one explicitly
@@ -31,7 +34,7 @@ export const config = {
   matcher: [
     // Skip Next.js internals and all static files, unless found in search params
     "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
-    // Always run for API routes
-    "/(api|trpc)(.*)",
+    // Skip API routes that use Node.js runtime
+    "/((?!api).*)",
   ],
 };

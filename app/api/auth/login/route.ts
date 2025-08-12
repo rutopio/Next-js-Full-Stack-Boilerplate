@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { signIn } from "@/auth";
+import { signIn } from "@/app/auth";
 
 export async function POST(request: NextRequest) {
   try {

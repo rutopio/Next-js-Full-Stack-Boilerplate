@@ -2,18 +2,14 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { compare } from "bcrypt-ts";
 
+import { authConfig } from "@/app/auth.config";
 import { getUserByEmail } from "@/lib/db/queries";
 import { serializeId } from "@/lib/id";
 
 export const runtime = "nodejs";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
-  // third-party config
-  debug: process.env.NODE_ENV === "development",
-  pages: {
-    signIn: "/login",
-    newUser: "/",
-  },
+  ...authConfig,
   session: {
     strategy: "jwt",
   },
@@ -26,20 +22,22 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         password: {},
       },
 
-      authorize: async (credentials) => {
-        const user = await getUserByEmail(credentials.email as string);
-
+      async authorize({
+        email,
+        password,
+      }: {
+        email: string;
+        password: string;
+      }) {
+        const user = await getUserByEmail(email as string);
         if (!user) {
-          throw new Error("Invalid credentials.");
+          throw new Error("email_not_found.");
         }
 
-        const passwordsMatch = await compare(
-          credentials.password as string,
-          user.password
-        );
+        const passwordsMatch = await compare(password as string, user.password);
 
         if (!passwordsMatch) {
-          throw new Error("Invalid credentials.");
+          throw new Error("incorrect_password.");
         }
 
         return { ...user, maxAge: 30 * 24 * 60 * 60 };

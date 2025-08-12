@@ -7,34 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { auth } from "@/app/auth";
 
-export default async function DashboardPage() {
+export default async function About() {
   const session = await auth();
-
-  if (!session?.user) {
-    return (
-      <div className="flex h-screen w-screen flex-col items-center justify-center gap-4">
-        <Badge>Private Page</Badge>
-        <div className="text-2xl font-bold">Unauthorized </div>
-
-        <Link href="/">
-          <Button variant="outline" className="cursor-pointer">
-            <ArrowLeftIcon />
-            Jump back to HomePage
-          </Button>
-        </Link>
-
-        <Separator />
-
-        <CurrentSession session={session} />
-      </div>
-    );
-  }
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-4">
       <div className="flex w-full flex-col items-center justify-center gap-4">
-        <Badge>Private Page</Badge>
-        <div className="text-2xl font-bold">Authorized: Dashboard</div>
+        <Badge variant="secondary">Public Page</Badge>
+
+        <div className="text-2xl font-bold">About</div>
         <Link href="/">
           <Button variant="outline" className="cursor-pointer">
             <ArrowLeftIcon />

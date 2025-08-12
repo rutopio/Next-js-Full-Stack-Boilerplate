@@ -14,7 +14,8 @@ export const usersTable = pgTable("users_table", {
   password: text("password").notNull().default(""),
   isDeleted: boolean("is_deleted").notNull().default(false),
   isAdmin: boolean("is_admin").notNull().default(false),
-  createdAt: timestamp("created_at")
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
     .notNull()
     .$onUpdate(() => new Date()),
 });
