@@ -140,7 +140,7 @@ export default function ApiDocsPage() {
                   {endpoint.path}
                 </code>
                 {endpoint.auth && (
-                  <Badge variant="outline">🔒 Authentication Required</Badge>
+                  <Badge variant="outline">Auth Required</Badge>
                 )}
               </div>
               <CardTitle className="text-lg">{endpoint.summary}</CardTitle>

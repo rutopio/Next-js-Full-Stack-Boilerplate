@@ -57,7 +57,7 @@ export default function SignUpPage() {
         if (result.message === "email_already_exists") {
           throw new Error("This email has already been registered.");
         }
-        throw new Error(`${result.message} (${response.status})`);
+        throw new Error(result.message || "Sign up failed");
       }
 
       return result;

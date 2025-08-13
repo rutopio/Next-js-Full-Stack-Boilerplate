@@ -65,11 +65,11 @@ class ApiDocs {
       }
 
       if (endpoint.auth) {
-        markdown += `🔒 **Authentication Required**\n\n`;
+        markdown += `**Authentication Required**\n\n`;
       }
 
       if (endpoint.rateLimit) {
-        markdown += `⏱️ **Rate Limit:** ${endpoint.rateLimit.limit} requests per ${endpoint.rateLimit.windowMs / 1000} seconds\n\n`;
+        markdown += `**Rate Limit:** ${endpoint.rateLimit.limit} requests per ${endpoint.rateLimit.windowMs / 1000} seconds\n\n`;
       }
 
       if (endpoint.bodySchema) {

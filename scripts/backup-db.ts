@@ -23,7 +23,7 @@ async function backupDatabase() {
   try {
     console.log("✦ Creating database backup...");
 
-    // 導出所有用戶資料
+    // Export all user data
     const users = await db.execute(sql`SELECT * FROM users_table`);
 
     const backupData = {
@@ -33,7 +33,7 @@ async function backupDatabase() {
       },
     };
 
-    // BigInt 序列化處理
+    // BigInt serialization handling
     const jsonString = JSON.stringify(
       backupData,
       (_key, value) => (typeof value === "bigint" ? value.toString() : value),
@@ -43,7 +43,7 @@ async function backupDatabase() {
     writeFileSync(backupFile, jsonString);
 
     console.log(`✔ Database backup created: ${backupFile}`);
-    console.log(`📄 Exported ${users.rows.length} users`);
+    console.log(`✔ Exported ${users.rows.length} users`);
   } catch (error) {
     console.error("✘ Backup failed:", error);
     process.exit(1);

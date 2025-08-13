@@ -25,14 +25,14 @@ async function restoreDatabase(backupFile: string) {
       process.exit(1);
     }
 
-    // 清空現有資料
+    // Clear existing data
     await db.delete(usersTable);
     console.log("✦ Cleared existing data");
 
-    // 恢復用戶資料
+    // Restore user data
     const users = backupData.tables.users_table;
     if (users.length > 0) {
-      // 轉換資料格式以符合 schema
+      // Transform data format to match schema
       const formattedUsers = users.map((user: any) => ({
         id: user.id,
         userId: BigInt(user.user_id),
