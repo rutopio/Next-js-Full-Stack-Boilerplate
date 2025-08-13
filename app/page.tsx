@@ -24,6 +24,14 @@ export default function Home() {
         <Badge variant="secondary">Public Page</Badge>
 
         <div className="text-2xl font-bold">Home</div>
+
+        <Link href="/docs">
+          <Button variant="secondary" className="cursor-pointer">
+            <ArrowRightIcon />
+            API Docs
+          </Button>
+        </Link>
+
         <Link href="/about">
           <Button variant="outline" className="cursor-pointer">
             <ArrowRightIcon />

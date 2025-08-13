@@ -8,19 +8,19 @@ export interface SensitiveDataFilter {
 }
 
 const DEFAULT_SENSITIVE_FIELDS = [
-  'password',
-  'passwordHash',
-  'salt',
-  'token',
-  'accessToken',
-  'refreshToken',
-  'secret',
-  'apiKey',
-  'privateKey',
-  'ssn',
-  'creditCard',
-  'cvv',
-  'pin',
+  "password",
+  "passwordHash",
+  "salt",
+  "token",
+  "accessToken",
+  "refreshToken",
+  "secret",
+  "apiKey",
+  "privateKey",
+  "ssn",
+  "creditCard",
+  "cvv",
+  "pin",
 ];
 
 export class SecurityFilter {
@@ -30,7 +30,7 @@ export class SecurityFilter {
   constructor(config?: SensitiveDataFilter) {
     this.sensitiveFields = new Set([
       ...DEFAULT_SENSITIVE_FIELDS,
-      ...(config?.sensitiveFields || [])
+      ...(config?.sensitiveFields || []),
     ]);
     this.customFilter = config?.customFilter;
   }
@@ -42,16 +42,16 @@ export class SecurityFilter {
     }
 
     if (Array.isArray(obj)) {
-      return obj.map(item => this.filterObject(item));
+      return obj.map((item) => this.filterObject(item));
     }
 
-    if (typeof obj === 'object') {
+    if (typeof obj === "object") {
       const filtered: any = {};
-      
+
       for (const [key, value] of Object.entries(obj)) {
         if (this.sensitiveFields.has(key.toLowerCase())) {
-          filtered[key] = '[REDACTED]';
-        } else if (typeof value === 'object') {
+          filtered[key] = "[REDACTED]";
+        } else if (typeof value === "object") {
           filtered[key] = this.filterObject(value);
         } else {
           filtered[key] = value;
@@ -70,11 +70,11 @@ export class SecurityFilter {
     if (!user) return user;
 
     const filtered = this.filterObject(user);
-    
+
     // Additional user-specific filtering
     if (filtered.email) {
       // Optionally mask part of email for logs
-      const [localPart, domain] = filtered.email.split('@');
+      const [localPart, domain] = filtered.email.split("@");
       if (localPart && domain) {
         filtered.emailMasked = `${localPart.slice(0, 2)}***@${domain}`;
       }
@@ -86,14 +86,14 @@ export class SecurityFilter {
   // Filter for logging purposes (more aggressive)
   filterForLogging(obj: any): any {
     const filtered = this.filterObject(obj);
-    
+
     // Additional fields to remove in logs
-    const logSensitiveFields = ['email', 'phone', 'address', 'ip'];
-    
-    if (typeof filtered === 'object' && filtered !== null) {
+    const logSensitiveFields = ["email", "phone", "address", "ip"];
+
+    if (typeof filtered === "object" && filtered !== null) {
       for (const field of logSensitiveFields) {
         if (filtered[field]) {
-          filtered[field] = '[REDACTED]';
+          filtered[field] = "[REDACTED]";
         }
       }
     }
@@ -103,7 +103,7 @@ export class SecurityFilter {
 
   // Check if a string contains sensitive patterns
   containsSensitiveData(text: string): boolean {
-    if (typeof text !== 'string') return false;
+    if (typeof text !== "string") return false;
 
     const sensitivePatterns = [
       /\b\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}\b/, // Credit card
@@ -113,16 +113,16 @@ export class SecurityFilter {
       /\b[A-Za-z0-9+/]{40,}={0,2}\b/, // Base64 tokens (rough)
     ];
 
-    return sensitivePatterns.some(pattern => pattern.test(text));
+    return sensitivePatterns.some((pattern) => pattern.test(text));
   }
 
   // Sanitize string for safe display
   sanitizeString(text: string): string {
-    if (typeof text !== 'string') return '';
+    if (typeof text !== "string") return "";
 
     return text
-      .replace(/[<>]/g, '') // Remove potential XSS
-      .replace(/['";]/g, '') // Remove potential injection
+      .replace(/[<>]/g, "") // Remove potential XSS
+      .replace(/['";]/g, "") // Remove potential injection
       .trim();
   }
 }

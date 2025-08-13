@@ -41,18 +41,27 @@ interface ApiDocumentation {
 export default function ApiDocsPage() {
   const [docs, setDocs] = useState<ApiDocumentation | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     // Add slight delay to ensure documentation is registered
     const timer = setTimeout(() => {
       fetch("/api/docs")
         .then((res) => res.json())
-        .then((data) => {
-          setDocs(data);
+        .then((response) => {
+          // Handle the new ApiResponseBuilder format
+          if (response.success && response.data) {
+            setDocs(response.data);
+            setError(null);
+          } else {
+            console.error("API documentation format error:", response);
+            setError(response.error?.message || "Invalid API response format");
+          }
           setLoading(false);
         })
         .catch((error) => {
           console.error("Failed to load API docs:", error);
+          setError("Failed to load API documentation");
           setLoading(false);
         });
     }, 100);
@@ -80,14 +89,16 @@ export default function ApiDocsPage() {
     );
   }
 
-  if (!docs) {
+  if (error || !docs) {
     return (
       <div className="container mx-auto py-8">
         <div className="text-center">
           <h1 className="text-2xl font-bold text-red-600">
             Failed to Load Documentation
           </h1>
-          <p className="mt-2 text-gray-600">Unable to load API documentation</p>
+          <p className="mt-2 text-gray-600">
+            {error || "Unable to load API documentation"}
+          </p>
         </div>
       </div>
     );
@@ -119,7 +130,7 @@ export default function ApiDocsPage() {
       </div>
 
       <div className="space-y-6">
-        {docs.endpoints.map((endpoint, index) => (
+        {docs.endpoints?.map((endpoint, index) => (
           <Card key={index}>
             <CardHeader>
               <div className="mb-2 flex items-center gap-2">
@@ -188,7 +199,7 @@ export default function ApiDocsPage() {
         ))}
       </div>
 
-      {docs.endpoints.length === 0 && (
+      {(!docs.endpoints || docs.endpoints.length === 0) && (
         <div className="py-8 text-center">
           <p className="text-gray-500">No API endpoints currently registered</p>
         </div>

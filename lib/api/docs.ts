@@ -38,7 +38,25 @@ class ApiDocs {
   };
 
   addEndpoint(endpoint: ApiEndpoint) {
-    this.documentation.endpoints.push(endpoint);
+    // Check if endpoint already exists to prevent duplicates
+    const existingEndpoint = this.documentation.endpoints.find(
+      (existing) =>
+        existing.method === endpoint.method && existing.path === endpoint.path
+    );
+
+    if (!existingEndpoint) {
+      this.documentation.endpoints.push(endpoint);
+    }
+  }
+
+  // Method to clear all endpoints (useful for testing or resets)
+  clearEndpoints() {
+    this.documentation.endpoints = [];
+  }
+
+  // Get current endpoint count (useful for debugging)
+  getEndpointCount(): number {
+    return this.documentation.endpoints.length;
   }
 
   generateMarkdown(): string {
@@ -105,10 +123,11 @@ class ApiDocs {
     return this.documentation;
   }
 
-  private schemaToExample(schema: ZodType<any>): string {
+  private schemaToExample(_schema: ZodType<any>): string {
     try {
       // Simplified schema to example conversion
       // In actual application, more complex logic might be needed
+      // TODO: Parse schema to generate actual example data
       return JSON.stringify(
         {
           "// Fill in values according to schema definition": "...",

@@ -1,14 +1,22 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 
 import { apiDocs } from "@/lib/api/docs";
 import { registerApiDocs } from "@/lib/api/register-docs";
+import { ApiResponseBuilder } from "@/lib/api/validation";
 
 export async function GET(request: NextRequest) {
-  registerApiDocs();
-  const { searchParams } = new URL(request.url);
-  const format = searchParams.get("format") || "json";
-
   try {
+    // Register all API docs
+    registerApiDocs();
+
+    const { searchParams } = new URL(request.url);
+    const format = searchParams.get("format") || "json";
+
+    // For debugging - log endpoint count
+    console.log(
+      `API Docs: Currently ${apiDocs.getEndpointCount()} endpoints registered`
+    );
+
     if (format === "markdown") {
       const markdown = apiDocs.generateMarkdown();
       return new Response(markdown, {
@@ -20,11 +28,14 @@ export async function GET(request: NextRequest) {
     }
 
     const documentation = apiDocs.generateJSON();
-    return NextResponse.json(documentation);
+    return ApiResponseBuilder.success(
+      documentation,
+      `API documentation retrieved successfully (${documentation.endpoints.length} endpoints)`
+    );
   } catch (error) {
-    return NextResponse.json(
-      { error: "Failed to generate API documentation" },
-      { status: 500 }
+    console.error("Failed to generate API documentation:", error);
+    return ApiResponseBuilder.internalError(
+      "Failed to generate API documentation"
     );
   }
 }

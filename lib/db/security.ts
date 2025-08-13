@@ -25,7 +25,7 @@ export class DatabaseSecurity {
     maxExecutionTime = 10000
   ): Promise<T> {
     const startTime = Date.now();
-    
+
     try {
       // Update query statistics
       this.updateQueryStats(operation);
@@ -33,20 +33,25 @@ export class DatabaseSecurity {
       // Execute with timeout
       const result = await Promise.race([
         queryFn(),
-        this.createTimeoutPromise(maxExecutionTime)
+        this.createTimeoutPromise(maxExecutionTime),
       ]);
 
       const executionTime = Date.now() - startTime;
-      
+
       // Log slow queries
       if (executionTime > 1000) {
-        console.warn(`Slow query detected: ${operation} took ${executionTime}ms`);
+        console.warn(
+          `Slow query detected: ${operation} took ${executionTime}ms`
+        );
       }
 
       return result;
     } catch (error) {
       const executionTime = Date.now() - startTime;
-      console.error(`Query failed: ${operation} after ${executionTime}ms`, error);
+      console.error(
+        `Query failed: ${operation} after ${executionTime}ms`,
+        error
+      );
       throw error;
     }
   }
@@ -60,39 +65,44 @@ export class DatabaseSecurity {
   }
 
   private updateQueryStats(operation: string) {
-    const current = this.queryStats.get(operation) || { count: 0, lastUsed: new Date() };
+    const current = this.queryStats.get(operation) || {
+      count: 0,
+      lastUsed: new Date(),
+    };
     this.queryStats.set(operation, {
       count: current.count + 1,
-      lastUsed: new Date()
+      lastUsed: new Date(),
     });
   }
 
   // Get query statistics
   getQueryStats() {
-    const stats = Array.from(this.queryStats.entries()).map(([operation, data]) => ({
-      operation,
-      count: data.count,
-      lastUsed: data.lastUsed
-    }));
-    
+    const stats = Array.from(this.queryStats.entries()).map(
+      ([operation, data]) => ({
+        operation,
+        count: data.count,
+        lastUsed: data.lastUsed,
+      })
+    );
+
     return stats.sort((a, b) => b.count - a.count);
   }
 
   // Database health check
   async healthCheck(): Promise<{
-    status: 'healthy' | 'unhealthy';
+    status: "healthy" | "unhealthy";
     responseTime: number;
     activeConnections?: number;
     error?: string;
   }> {
     const startTime = Date.now();
-    
+
     try {
       // Simple ping query
       await db.execute(sql`SELECT 1 as ping`);
-      
+
       const responseTime = Date.now() - startTime;
-      
+
       // Check active connections (if available)
       let activeConnections: number | undefined;
       try {
@@ -107,23 +117,23 @@ export class DatabaseSecurity {
       }
 
       return {
-        status: responseTime < 1000 ? 'healthy' : 'unhealthy',
+        status: responseTime < 1000 ? "healthy" : "unhealthy",
         responseTime,
-        activeConnections
+        activeConnections,
       };
     } catch (error) {
       return {
-        status: 'unhealthy',
+        status: "unhealthy",
         responseTime: Date.now() - startTime,
-        error: error instanceof Error ? error.message : 'Unknown error'
+        error: error instanceof Error ? error.message : "Unknown error",
       };
     }
   }
 
   // Validate input to prevent common injection patterns
   static validateInput(input: string): boolean {
-    if (typeof input !== 'string') return false;
-    
+    if (typeof input !== "string") return false;
+
     // Check for common SQL injection patterns
     const suspiciousPatterns = [
       /'\s*OR\s*'?1'?\s*='?1/i,
@@ -139,19 +149,19 @@ export class DatabaseSecurity {
       /\/\*/,
       /\*\//,
       /xp_cmdshell/i,
-      /sp_executesql/i
+      /sp_executesql/i,
     ];
 
-    return !suspiciousPatterns.some(pattern => pattern.test(input));
+    return !suspiciousPatterns.some((pattern) => pattern.test(input));
   }
 
   // Sanitize string input
   static sanitizeInput(input: string): string {
-    if (typeof input !== 'string') return '';
-    
+    if (typeof input !== "string") return "";
+
     return input
-      .replace(/[<>]/g, '') // Remove potential XSS characters
-      .replace(/['"]/g, '') // Remove quotes
+      .replace(/[<>]/g, "") // Remove potential XSS characters
+      .replace(/['"]/g, "") // Remove quotes
       .trim();
   }
 
@@ -159,7 +169,7 @@ export class DatabaseSecurity {
   clearOldStats(daysOld = 7) {
     const cutoffDate = new Date();
     cutoffDate.setDate(cutoffDate.getDate() - daysOld);
-    
+
     for (const [operation, data] of this.queryStats.entries()) {
       if (data.lastUsed < cutoffDate) {
         this.queryStats.delete(operation);

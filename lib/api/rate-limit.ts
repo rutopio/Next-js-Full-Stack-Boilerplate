@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { ApiResponseBuilder } from "./validation";
+
 interface RateLimitEntry {
   count: number;
   resetTime: number;
@@ -97,17 +99,16 @@ export function rateLimit(options: RateLimitOptions) {
     };
 
     if (!result.allowed) {
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Too Many Requests",
-          message: `Rate limit exceeded. Try again in ${Math.ceil((result.resetTime - Date.now()) / 1000)} seconds.`,
-        },
-        {
-          status: 429,
-          headers,
-        }
+      const response = ApiResponseBuilder.tooManyRequests(
+        `Rate limit exceeded. Try again in ${Math.ceil((result.resetTime - Date.now()) / 1000)} seconds.`
       );
+
+      // Add rate limit headers to response
+      Object.entries(headers).forEach(([key, value]) => {
+        response.headers.set(key, value);
+      });
+
+      return response;
     }
 
     return null; // Allow request to proceed

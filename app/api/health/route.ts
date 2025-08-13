@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 
+import { ApiResponseBuilder } from "@/lib/api/validation";
 import { dbSecurity } from "@/lib/db/security";
 
 export async function GET() {
@@ -7,7 +8,7 @@ export async function GET() {
     const dbHealth = await dbSecurity.healthCheck();
     const queryStats = dbSecurity.getQueryStats();
 
-    const healthStatus = {
+    const healthData = {
       status: dbHealth.status,
       database: {
         responseTime: dbHealth.responseTime,
@@ -18,20 +19,28 @@ export async function GET() {
         totalOperations: queryStats.length,
         topQueries: queryStats.slice(0, 5), // Top 5 most used queries
       },
-      timestamp: new Date().toISOString(),
     };
 
-    const httpStatus = dbHealth.status === 'healthy' ? 200 : 503;
-
-    return NextResponse.json(healthStatus, { status: httpStatus });
+    if (dbHealth.status === "healthy") {
+      return ApiResponseBuilder.success(healthData, "System is healthy");
+    } else {
+      // Create error response with 503 status
+      const errorResponse = ApiResponseBuilder.internalError(
+        "System health check failed"
+      );
+      return new NextResponse(errorResponse.body, {
+        status: 503,
+        headers: errorResponse.headers,
+      });
+    }
   } catch (error) {
-    return NextResponse.json(
-      {
-        status: 'unhealthy',
-        error: 'Health check failed',
-        timestamp: new Date().toISOString(),
-      },
-      { status: 503 }
+    console.error("Health check failed:", error);
+    const errorResponse = ApiResponseBuilder.internalError(
+      "Health check failed"
     );
+    return new NextResponse(errorResponse.body, {
+      status: 503,
+      headers: errorResponse.headers,
+    });
   }
 }
