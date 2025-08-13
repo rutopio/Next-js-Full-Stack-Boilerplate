@@ -43,7 +43,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         return {
-          id: user.userId,
+          id: serializeId(user.userId),
           email: user.email,
           maxAge: 30 * 24 * 60 * 60,
         };
@@ -54,7 +54,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
-        token.userId = serializeId(user.userId);
+        token.userId = user.id; // user.id 已經是序列化後的字串
         token.email = user.email;
         token.maxAge = user.maxAge;
 

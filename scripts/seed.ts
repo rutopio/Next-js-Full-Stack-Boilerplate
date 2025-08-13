@@ -1,5 +1,4 @@
 #!/usr/bin/env tsx
-
 import { config } from "dotenv";
 
 import { seedDatabase } from "@/lib/db/seeds";

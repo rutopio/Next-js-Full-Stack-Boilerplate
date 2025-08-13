@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-import { writeFileSync, existsSync, mkdirSync } from "fs";
+import { existsSync, mkdirSync, writeFileSync } from "fs";
 import { join } from "path";
 import { config } from "dotenv";
 import { sql } from "drizzle-orm";
@@ -25,18 +25,20 @@ async function backupDatabase() {
 
     // 導出所有用戶資料
     const users = await db.execute(sql`SELECT * FROM users_table`);
-    
+
     const backupData = {
       timestamp: new Date().toISOString(),
       tables: {
-        users_table: users.rows
-      }
+        users_table: users.rows,
+      },
     };
 
     // BigInt 序列化處理
-    const jsonString = JSON.stringify(backupData, (_key, value) =>
-      typeof value === 'bigint' ? value.toString() : value
-    , 2);
+    const jsonString = JSON.stringify(
+      backupData,
+      (_key, value) => (typeof value === "bigint" ? value.toString() : value),
+      2
+    );
 
     writeFileSync(backupFile, jsonString);
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-import { readFileSync, existsSync } from "fs";
+import { existsSync, readFileSync } from "fs";
 import { config } from "dotenv";
 
 import { db } from "@/lib/db/db";
@@ -19,7 +19,7 @@ async function restoreDatabase(backupFile: string) {
     console.log(`✦ Restoring database from: ${backupFile}`);
 
     const backupData = JSON.parse(readFileSync(backupFile, "utf8"));
-    
+
     if (!backupData.tables?.users_table) {
       console.error("✘ Invalid backup file format");
       process.exit(1);
@@ -43,7 +43,7 @@ async function restoreDatabase(backupFile: string) {
         createdAt: new Date(user.created_at),
         updatedAt: new Date(user.updated_at),
       }));
-      
+
       await db.insert(usersTable).values(formattedUsers);
       console.log(`✔ Restored ${users.length} users`);
     }
