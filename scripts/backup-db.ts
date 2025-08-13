@@ -11,7 +11,7 @@ config({
 });
 
 async function backupDatabase() {
-  const backupDir = join(process.cwd(), "backups");
+  const backupDir = join(process.cwd(), "lib", "db", "backups");
 
   if (!existsSync(backupDir)) {
     mkdirSync(backupDir, { recursive: true });

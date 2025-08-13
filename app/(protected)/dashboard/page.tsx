@@ -34,7 +34,9 @@ export default async function DashboardPage() {
     <div className="flex h-screen w-screen flex-col items-center justify-center gap-4">
       <div className="flex w-full flex-col items-center justify-center gap-4">
         <Badge>Private Page</Badge>
-        <div className="text-2xl font-bold">Authorized: Dashboard</div>
+        <div className="text-2xl font-bold">
+          Authorized: Dashboard for {session.user.email}
+        </div>
         <Link href="/">
           <Button variant="outline" className="cursor-pointer">
             <ArrowLeftIcon />

@@ -413,4 +413,37 @@ export function registerApiDocs() {
       },
     },
   });
+
+  // Register dog image API endpoint
+  apiDocs.addEndpoint({
+    method: "GET",
+    path: "/api/dog",
+    summary: "Get Random Dog Image",
+    description: "Fetch a random dog image from the dog.ceo API",
+    responses: {
+      "200": {
+        description: "Random dog image retrieved successfully",
+        example: {
+          success: true,
+          data: {
+            imageUrl: "https://images.dog.ceo/breeds/labradoodle/Cali.jpg",
+            source: "dog.ceo API",
+          },
+          message: "Random dog image retrieved successfully",
+          meta: { timestamp: "2024-01-01T00:00:00.000Z" },
+        },
+      },
+      "500": {
+        description: "Failed to retrieve dog image",
+        example: {
+          success: false,
+          error: {
+            type: "INTERNAL_ERROR",
+            message: "Failed to retrieve dog image",
+          },
+          meta: { timestamp: "2024-01-01T00:00:00.000Z" },
+        },
+      },
+    },
+  });
 }

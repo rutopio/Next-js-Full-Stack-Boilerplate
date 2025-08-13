@@ -4,7 +4,6 @@ import { compare } from "bcrypt-ts";
 
 import { authConfig } from "@/app/auth.config";
 import { getUserByEmail } from "@/lib/db/queries";
-import { serializeId } from "@/lib/id";
 
 export const runtime = "nodejs";
 
@@ -43,7 +42,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         }
 
         return {
-          id: serializeId(user.userId),
+          userId: user.userId,
           email: user.email,
           maxAge: 30 * 24 * 60 * 60,
         };
@@ -54,7 +53,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   callbacks: {
     async jwt({ token, user }: { token: any; user: any }) {
       if (user) {
-        token.userId = user.id; // user.id 已經是序列化後的字串
+        token.userId = user.userId;
         token.email = user.email;
         token.maxAge = user.maxAge;
 

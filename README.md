@@ -1,40 +1,100 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Full Stack Boilerplate
 
-## Getting Started
+![Npm](https://img.shields.io/badge/npm-v10.9.2-CB3837?style=flat-square&logo=npm&logoColor=white)
+![Node](https://img.shields.io/badge/Node.js-v22.17.0-339933?style=flat-square&logo=nodedotjs&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-First, run the development server:
+![TypeScript](https://img.shields.io/badge/TypeScript-5.9.2-blue?style=flat-square&logo=typescript)
+![React](https://img.shields.io/badge/React-19.1.0-blue?style=flat-square&logo=react)
+![Next.js](https://img.shields.io/badge/Next.js-15.4.5-black?style=flat-square&logo=next.js)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-17-316192?style=flat-square&logo=postgresql&logoColor=white)
+![Drizzle](https://img.shields.io/badge/Drizzle-0.44.4-C5F74F?style=flat-square&logo=drizzle&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-38bdf8?style=flat-square&logo=tailwind-css)
+![ShadCN](https://img.shields.io/badge/shadcn%2Fui-2.4.0-000000?style=flat-square&logo=shadcnui&logoColor=white)
+
+## Features
+
+- **TypeScript** - with strict type checking
+- **Next.js** - with App Directory
+- **NextAuth.js v5** - with JWT and session management
+- **shadcn/ui** - High-quality React component library
+- **Tailwind CSS v4** - Modern utility-first CSS framework
+- **Dark theme support** - Light/dark mode toggle with next-themes
+- **PostgreSQL** - with Drizzle ORM
+- **React Query** - for server state management
+- **ESLint + Prettier** - for code quality
+- **Rate limiting** - middleware for API protection
+- **Turbopack** - for fast development builds
+
+## Quick Start
+
+### Installation
+
+1. **Install dependencies**
+
+```bash
+npm install
+```
+
+2. **Set Environment variables**
+
+Copy `env.example` to `.env.local`:
+
+```env
+DATABASE_URL="postgresql://username:password@localhost:5432/database_name"
+AUTH_SECRET="your-secret-key-here"
+```
+
+3. **Database setup**
+
+```bash
+# Generate migrations
+npm run db:generate
+
+# Run migrations
+npm run db:migrate
+
+# Seed database (optional)
+npm run db:seed
+```
+
+4. **Start development server**
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Available Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Development
 
-## Learn More
+- `npm run dev` - Start development server with Turbopack
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
+- `npm run format` - Format code with Prettier
+- `npm run format:check` - Check code formatting
 
-To learn more about Next.js, take a look at the following resources:
+### Database Management
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run db:generate` - Generate Drizzle migrations
+- `npm run db:migrate` - Run database migrations
+- `npm run db:studio` - Open Drizzle Studio
+- `npm run db:push` - Push schema changes
+- `npm run db:seed` - Seed database with sample data
+- `npm run db:clear` - Clear all database data
+- `npm run db:backup` - Create database backup
+- `npm run db:restore` - Restore from backup
+- `npm run db:maintain` - Run database maintenance
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Contributions
 
-## Deploy on Vercel
+Any contribution is welcome!
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Licensed under the MIT License
 
-```
-npx shadcn@latest add --all
-```
+Made with ♥ by [ChingRu/rutopio](https://github.com/rutopio)

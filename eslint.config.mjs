@@ -16,17 +16,12 @@ const eslintConfig = [
     "plugin:import/recommended",
     "plugin:import/typescript",
     "plugin:tailwindcss/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
     "plugin:prettier/recommended",
     "prettier"
   ),
   {
     files: ["**/*.{js,jsx,ts,tsx}"],
     plugins: {
-      prettier: await import("eslint-plugin-prettier"),
-      tailwindcss: await import("eslint-plugin-tailwindcss"),
-      import: await import("eslint-plugin-import"),
       "@typescript-eslint": await import("@typescript-eslint/eslint-plugin"),
     },
     languageOptions: {
